@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 class DownloadThread: Thread() {
 
     public val tag = this.javaClass.simpleName
-    public lateinit var downloadHandler: DownloadHandler
+    public var downloadHandler: DownloadHandler? = null
 
     override fun run() {
         Looper.prepare()

@@ -9,10 +9,12 @@ import java.util.concurrent.TimeUnit
 class DownloadHandler(looper: Looper): Handler(looper) {
 
     public val tag = this.javaClass.simpleName
+    private var mService:DownloadService? = null
 
     override fun handleMessage(msg: Message) {
         val song = msg.obj.toString()
         downloadSong(song)
+        mService?.stopSelf(msg.arg1)
     }
 
 
@@ -27,6 +29,10 @@ class DownloadHandler(looper: Looper): Handler(looper) {
             }
         }
         Log.d(tag, "Song downloaded!!! Song: $song")
+    }
+
+    fun setService(downloadService: DownloadService) {
+        mService = downloadService
     }
 
 }
