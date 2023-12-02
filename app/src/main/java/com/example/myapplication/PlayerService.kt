@@ -17,7 +17,8 @@ import android.util.Log
 
 const val NOTIFICATION_CHANNEL_ID = 11
 const val NOT_CHAN_ID = "Play Music Chanel"
-class PlayerService : Service(){
+
+class PlayerService : Service() {
 
     private val TAG: String = javaClass.simpleName
     private lateinit var mediaPlayer: MediaPlayer
@@ -38,21 +39,25 @@ class PlayerService : Service(){
         nb.setCategory(Notification.CATEGORY_SERVICE)
 
 
-        val notificationChannel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel(NOT_CHAN_ID, "Main Chanel", NotificationManager.IMPORTANCE_HIGH)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel =
+                NotificationChannel(NOT_CHAN_ID, "Main Chanel", NotificationManager.IMPORTANCE_HIGH)
+            val nm = getSystemService(NotificationManager::class.java) as NotificationManager
+            notificationChannel.description = "kjebfwekjfbwekfbwekj wekfbwekjfb"
+            nm.createNotificationChannel(notificationChannel)
         } else {
-            TODO("VERSION.SDK_INT < O")
+            ///VERSION.SDK_INT < O
         }
-        val nm = getSystemService(NotificationManager::class.java) as NotificationManager
-        notificationChannel.description = "kjebfwekjfbwekfbwekj wekfbwekjfb"
-        nm.createNotificationChannel(notificationChannel)
-
 
         val notification = nb.build()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(NOTIFICATION_CHANNEL_ID, notification, FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
-        }else{
+            startForeground(
+                NOTIFICATION_CHANNEL_ID,
+                notification,
+                FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+            )
+        } else {
             startForeground(NOTIFICATION_CHANNEL_ID, notification)
         }
 
@@ -64,6 +69,7 @@ class PlayerService : Service(){
         }
         return Service.START_NOT_STICKY
     }
+
     override fun onBind(intent: Intent?): IBinder? {
         Log.d(TAG, "onBind: ")
         return messanger.binder
@@ -82,11 +88,11 @@ class PlayerService : Service(){
 
     //Client's methods
 
-    public fun play(){
+    public fun play() {
         mediaPlayer.start()
     }
 
-    public fun pause(){
+    public fun pause() {
         mediaPlayer.pause()
     }
 
